@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="[TOC] java 中新建的对象在”堆”中.">
+<meta name="description" content="java 中新建的对象在”堆”中. 接口相关 接口可以声明引用(line 6)，但不能new来实例化(line 7):  123456789public interface Handler｛     public void Hello(); ｝     public   class   OtherParser&amp;#123;     Handler handler1; 					&#x2F;&#x2F; it&amp;apos;s tru">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;27&#x2F;java&#x2F;index.html">
 <meta property="og:site_name" content="TosakRin&#39;s Blog">
-<meta property="og:description" content="[TOC] java 中新建的对象在”堆”中.">
+<meta property="og:description" content="java 中新建的对象在”堆”中. 接口相关 接口可以声明引用(line 6)，但不能new来实例化(line 7):  123456789public interface Handler｛     public void Hello(); ｝     public   class   OtherParser&amp;#123;     Handler handler1; 					&#x2F;&#x2F; it&amp;apos;s tru">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-27T11:42:51.428Z">
+<meta property="og:updated_time" content="2019-12-13T02:28:37.971Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -317,8 +317,32 @@
       
 
       
-        <p>[TOC]</p>
-<p>java 中新建的对象在”堆”中.</p>
+        <p>java 中新建的对象在”堆”中.</p>
+<h3 id="接口相关"><a href="#接口相关" class="headerlink" title="接口相关"></a>接口相关</h3><ul>
+<li>接口可以<strong>声明引用</strong>(line 6)，但<strong>不能</strong>new来<strong>实例化</strong>(line 7):</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Handler</span>｛ </span></span><br><span class="line"><span class="class">    <span class="title">public</span> <span class="title">void</span> <span class="title">Hello</span>()</span>; </span><br><span class="line">｝ </span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>   <span class="class"><span class="keyword">class</span>   <span class="title">OtherParser</span></span>&#123; </span><br><span class="line">    Handler handler1; 					<span class="comment">// it's true  (line 6)</span></span><br><span class="line">    Handler handler2 = <span class="keyword">new</span> Handler()	<span class="comment">// it's wrong (line 7)</span></span><br><span class="line">...... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接口引用可以指向<strong>实现类的实例</strong>:</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyHandler</span> <span class="keyword">implements</span> <span class="title">Handler</span></span>&#123; </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Hellp</span><span class="params">()</span></span>&#123; </span><br><span class="line">	System.out.println( <span class="string">"my Handler implements "</span>); </span><br><span class="line">  &#125;     </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>   <span class="class"><span class="keyword">class</span>   <span class="title">OtherParser</span></span>&#123; </span><br><span class="line">	Handler handler3 = <span class="keyword">new</span> MyHandler(); <span class="comment">// it's true,接口引用指向实现类实例</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但要清楚的是接口引用调用其实现类的方法时,该方法必须已经在接口中被声明，而且在接口的实现类中该实现方法的类型和参数必须与接口中所定义的精确匹配</p>
+<ul>
+<li><p>接口的<strong>域</strong>:都是静态常量，public static final</p>
+<p>声明的同时就必须赋值（接口中不能编写静态代码块）</p>
+</li>
+<li><p>接口的<strong>方法</strong>:都是抽象方法，public abstract（缺省情况下也是），不可含有static或final</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Handler</span>｛ </span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">Hello</span>()</span>; 			<span class="comment">// 默认为public abstract</span></span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接口没有构造器，与之相对的抽象类可以有。</li>
+<li>同时，接口不能有静态方法，抽象类可以有</li>
+<li>接口不能实现另一个接口，但可以继承，且可以继承多个接口</li>
+</ul>
 
       
     </div>
@@ -409,8 +433,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -477,6 +510,22 @@ show_date_time();
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#接口相关"><span class="nav-number">1.</span> <span class="nav-text">接口相关</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
